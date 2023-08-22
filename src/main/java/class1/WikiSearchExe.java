@@ -8,13 +8,13 @@ import utils.Drivers;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Main {
+public class WikiSearchExe {
     public static void main(String[] args) {
         wikiSearch("Aardvark", "bear");
         wikiSearch("Lion", "king");
     }
 
-    public static void wikiSearch(String searchInput, String countInput) {
+    public static void wikiSearch(String searchInput, String inputToCount) {
         System.setProperty("webdriver.chrome.driver", Drivers.getChromeDriver());
         ChromeDriver driver = new ChromeDriver();
         driver.get("http://www.wikipedia.org");
@@ -32,15 +32,15 @@ public class Main {
         driver.close();
 
         //count and print how many the word appeared
-        int count = countWordOccurrences(pageText, countInput);
-        System.out.println("The word \"" + countInput + "\" appears " + count + " times.");
+        int count = countWordOccurrences(pageText, inputToCount);
+        System.out.println("The word \"" + inputToCount + "\" appears " + count + " times.");
 
     }
 
 
     // Method to count occurrences of a word in a text
     public static int countWordOccurrences(String text, String word) {
-        Pattern pattern = Pattern.compile(word, Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(word, Pattern.CASE_INSENSITIVE);//
         Matcher matcher = pattern.matcher(text);
 
         int count = 0;
