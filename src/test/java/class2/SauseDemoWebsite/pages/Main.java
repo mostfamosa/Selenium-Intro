@@ -1,9 +1,8 @@
-package class2.pages;
+package class2.SauseDemoWebsite.pages;
 
-import class2.Items;
-import class2.components.Footer;
-import class2.components.Header;
-import class2.components.SideMenu;
+import class2.SauseDemoWebsite.components.Footer;
+import class2.SauseDemoWebsite.components.Header;
+import class2.SauseDemoWebsite.components.SideMenu;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

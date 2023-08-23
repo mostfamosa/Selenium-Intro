@@ -1,4 +1,4 @@
-package class2.components;
+package class2.SauseDemoWebsite.components;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

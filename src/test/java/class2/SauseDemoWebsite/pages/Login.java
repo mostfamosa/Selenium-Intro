@@ -1,4 +1,4 @@
-package class2.pages;
+package class2.SauseDemoWebsite.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

@@ -1,9 +1,9 @@
-package class2.test;
+package class2.SauseDemoWebsite.test;
 
-import class2.components.SideMenu;
-import class2.pages.Login;
-import class2.pages.Main;
-import class2.pages.ShoppingCart;
+import class2.SauseDemoWebsite.components.SideMenu;
+import class2.SauseDemoWebsite.pages.Login;
+import class2.SauseDemoWebsite.pages.Main;
+import class2.SauseDemoWebsite.pages.ShoppingCart;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class sauceDemoTest {
+public class SauceDemoTest {
 
     public WebDriver driver;
 
