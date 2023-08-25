@@ -11,8 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import utils.Drivers;
 
-import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -35,14 +33,14 @@ public class SauceDemoTest {
         System.setProperty("webdriver.chrome.driver", Drivers.getChromeDriver());
         driver = new ChromeDriver();
         driver.get("http://www.saucedemo.com");
+
         //Arrange
         loginPage = new Login(driver);
     }
 
     @Test
     public void login_Standard_User_Validation() {
-        //user login to the site with max attempts = 5
-        loadMainPage(5);
+        loginPage.fullLoginProcess(userName, password);
         //Assert
         assertEquals("https://www.saucedemo.com/inventory.html", driver.getCurrentUrl());
     }
@@ -88,8 +86,7 @@ public class SauceDemoTest {
     @Test
     public void login_Standard_User_Then_Logout_Validation() {
         //Act
-        //user login to the site with max attempts = 5
-        loadMainPage(5);
+        loginPage.fullLoginProcess(userName, password);
         mainPage = new Main(driver);
         mainPage.getSideMenu().openSideMenu();
         mainPage.getSideMenu().logout();
@@ -101,8 +98,7 @@ public class SauceDemoTest {
     @Test
     public void side_Menu_About_Link_Validation() {
         //Act
-        //user login to the site with max attempts = 5
-        loadMainPage(5);
+        loginPage.fullLoginProcess(userName, password);
         mainPage = new Main(driver);
         SideMenu sideMenu = mainPage.getSideMenu();
         sideMenu.openSideMenu();
@@ -115,11 +111,9 @@ public class SauceDemoTest {
     @Test
     public void side_Menu_All_Items_Link_Validation() {
         //Act
-        //user login to the site with max attempts = 5
-        loadMainPage(5);
+        loginPage.fullLoginProcess(userName, password);
         mainPage = new Main(driver);
-        //go to the cart page with max attempts = 5
-        loadCartPage(5);
+        mainPage.getHeader().goToCart();
         shoppingCartPage = new ShoppingCart(driver);
         SideMenu sideMenu = shoppingCartPage.getSideMenu();
         sideMenu.openSideMenu();
@@ -132,8 +126,7 @@ public class SauceDemoTest {
     @Test
     public void side_Menu_Logout_Link_Validation() {
         //Act
-        //user login to the site with max attempts = 5
-        loadMainPage(5);
+        loginPage.fullLoginProcess(userName, password);
         mainPage = new Main(driver);
         SideMenu sideMenu = mainPage.getSideMenu();
         sideMenu.openSideMenu();
@@ -146,13 +139,11 @@ public class SauceDemoTest {
     @Test
     public void add_Two_Items_To_Cart_And_Validate() {
         //Act
-        //user login to the site with max attempts = 5
-        loadMainPage(5);
+        loginPage.fullLoginProcess(userName, password);
         mainPage = new Main(driver);
         mainPage.addItemToCart();
         mainPage.addItemToCart();
-        //go to the cart page with max attempts = 5
-        loadCartPage(5);
+        mainPage.getHeader().goToCart();
         shoppingCartPage = new ShoppingCart(driver);
         int itemsInCart = shoppingCartPage.getCartQuantity();
 
@@ -163,15 +154,13 @@ public class SauceDemoTest {
     @Test
     public void add_Three_Items_To_Cart_And_Remove_Item_Then_Validate() {
         //Act
-        //user login to the site with max attempts = 5
-        loadMainPage(5);
+        loginPage.fullLoginProcess(userName, password);
         mainPage = new Main(driver);
         mainPage.addItemToCart();
         mainPage.addItemToCart();
         mainPage.addItemToCart();
 
-        //go to the cart page with max attempts = 5
-        loadCartPage(5);
+        mainPage.getHeader().goToCart();
 
         shoppingCartPage = new ShoppingCart(driver);
         shoppingCartPage.removeItemfromCart();
@@ -182,14 +171,12 @@ public class SauceDemoTest {
     }
 
     @Test
-    public void add_Items_Then_Remove_It_Then_Validate_Card() {
+    public void add_Items_Then_Remove_It_Then_Validate_Cart() {
         //Act
-        //user login to the site with max attempts = 5
-        loadMainPage(5);
+        loginPage.fullLoginProcess(userName, password);
         mainPage = new Main(driver);
         mainPage.addItemToCart();
-        //go to the cart page with max attempts = 5
-        loadCartPage(5);
+        mainPage.getHeader().goToCart();
         shoppingCartPage = new ShoppingCart(driver);
         shoppingCartPage.removeItemfromCart();
         int itemsInCart = shoppingCartPage.getCartQuantity();
@@ -201,31 +188,5 @@ public class SauceDemoTest {
     @AfterEach
     void clear() {
         driver.close();
-    }
-
-    private void loadMainPage(int maxAttempts) {
-        int loginAttempts = 0;
-        //make sure the user login to the site and in the main page loaded
-        while (!Objects.equals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html")) {
-            if (loginAttempts != maxAttempts)
-                loginPage.fullLoginProcess(userName, password);
-            else {
-                throw new RuntimeException("Failed To Login (Max Attempts Reached)!");
-            }
-            loginAttempts++;
-        }
-    }
-
-    private void loadCartPage(int maxAttempts) {
-        int goCartAttempts = 0;
-        //make sure the cart page loaded
-        while (!Objects.equals(driver.getCurrentUrl(), "https://www.saucedemo.com/cart.html")) {
-            if (goCartAttempts != maxAttempts)
-                mainPage.getHeader().goToCart();
-            else {
-                throw new RuntimeException("Failed To go To Cart Page (Max Attempts Reached)!");
-            }
-            goCartAttempts++;
-        }
     }
 }

@@ -3,14 +3,13 @@ package class2.SauseDemoWebsite.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import java.util.List;
 
-public class ShoppingCart extends Main {
+public class ShoppingCart extends BasePage {
 
-    private final String  BUTTON_CONTINUE_SHOPPING = "continue-shopping";
-    private final String  BUTTON_CHECKOUT = "checkout";
-    private final String CART_ITEMS = "//div[@class = 'cart_item']";
+    private final By BUTTON_CONTINUE_SHOPPING = By.id("continue-shopping");
+    private final By BUTTON_CHECKOUT = By.id("checkout");
+    private final By CART_ITEMS = By.xpath("//div[@class = 'cart_item']");
 
     private WebElement continueShoppingBtn;
     private WebElement checkoutBtn;
@@ -20,22 +19,22 @@ public class ShoppingCart extends Main {
         super(driver);
         this.initPage();
     }
-    public void initPage(){
-        continueShoppingBtn = this.driver.findElement(By.id(BUTTON_CONTINUE_SHOPPING));
-        checkoutBtn = this.driver.findElement(By.id(BUTTON_CHECKOUT));
+
+    public void initPage() {
+        continueShoppingBtn = waitToLoad(BUTTON_CONTINUE_SHOPPING);
+        checkoutBtn = waitToLoad(BUTTON_CHECKOUT);
     }
 
-    public void clickOnCheckout(){
+    public void clickOnCheckout() {
         this.checkoutBtn.click();
     }
 
-    public void clickOnContinueShopping(){
+    public void clickOnContinueShopping() {
         this.continueShoppingBtn.click();
     }
 
-    public int getCartQuantity(){
-        cartItems = this.driver.findElements(By.xpath(CART_ITEMS));
+    public int getCartQuantity() {
+        cartItems = this.driver.findElements(CART_ITEMS);
         return cartItems.size();
     }
-
 }
