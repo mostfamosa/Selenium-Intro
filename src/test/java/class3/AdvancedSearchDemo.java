@@ -1,7 +1,7 @@
-package class3.page;
+package class3;
 
 import class3.components.*;
-import class3.entity.*;
+import class3.page.AdvancedSearchPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import utils.Drivers;
@@ -24,36 +24,38 @@ import static class3.entity.PerPageOptions.*;
 import static class3.entity.Country.*;
 
 
-public class AdvancedSearch {
+public class AdvancedSearchDemo {
     public static void main(String[] args) {
         System.setProperty("webdriver.chrome.driver", Drivers.getChromeDriver());
         WebDriver driver = new ChromeDriver();
         driver.get("https://www.ebay.com/sch/ebayadvsearch");
 
-        KeywordsSearch keywordsSearch = new KeywordsSearch(driver);
+        AdvancedSearchPage advancedSearchPage = new AdvancedSearchPage(driver);
+
+        KeywordsSearch keywordsSearch = advancedSearchPage.getKeywordsSearch();
         keywordsSearch.fillSearchByKeyword("hi", "lol", ALL_WORDS_ANY_ORDER, ART);
 
-        SearchIncluding searchIncluding = new SearchIncluding(driver);
-        searchIncluding.searchIncludingOptions(TITLE_AND_DESCRIPTION);
-        searchIncluding.searchIncludingOptions(COMPLETED_ITEMS);
-        searchIncluding.searchIncludingOptions(SOLD_ITEMS);
+        SearchIncluding searchIncluding = advancedSearchPage.getSearchIncluding();
+        searchIncluding.selectSearchIncludingOptions(TITLE_AND_DESCRIPTION);
+        searchIncluding.selectSearchIncludingOptions(COMPLETED_ITEMS);
+        searchIncluding.selectSearchIncludingOptions(SOLD_ITEMS);
 
-        Price price = new Price(driver);
+        Price price = advancedSearchPage.getPrice();
         price.fillPriceOption("200", "1524");
 
-        BuyingFormat buyingFormat = new BuyingFormat(driver);
+        BuyingFormat buyingFormat = advancedSearchPage.getBuyingFormat();
 
         buyingFormat.selectBuyingFormat(ACCEPT_OFFERS);
         buyingFormat.selectBuyingFormat(BUY_NOW);
         buyingFormat.selectBuyingFormat(CLASSIFIED_ADS);
         buyingFormat.selectBuyingFormat(AUCTION);
 
-        Condition condition = new Condition(driver);
+        Condition condition = advancedSearchPage.getCondition();
         condition.selectCondition(NEW);
         condition.selectCondition(USED);
         condition.selectCondition(NOT_SPECIFIED);
 
-        ShowResults showResults = new ShowResults(driver);
+        ShowResults showResults = advancedSearchPage.getShowResults();
         showResults.selectShowResultsOptions(FREE_RETURNS);
         showResults.selectShowResultsOptions(RETURNS_ACCEPTED);
         showResults.selectShowResultsOptions(AUTHORIZED_SELLER);
@@ -76,12 +78,12 @@ public class AdvancedSearch {
         showResults.fillMinQuantity("51");
         showResults.fillMaxQuantity("510");
 
-        Shipping shipping = new Shipping(driver);
+        Shipping shipping = advancedSearchPage.getShipping();
         shipping.selectShippingOption(FREE_SHIPPING);
         shipping.selectShippingOption(LOCAL_SHIPPING);
         shipping.deSelectShippingOption(FREE_SHIPPING);
 
-        ItemLocation itemLocation = new ItemLocation(driver);
+        ItemLocation itemLocation = advancedSearchPage.getItemLocation();
         itemLocation.selectItemLocationOptions(DEFAULT);
         itemLocation.selectItemLocationOptions(ITEMS_WITHIN);
         itemLocation.fillWithInMiles(MILES_100);
@@ -94,17 +96,17 @@ public class AdvancedSearch {
         itemLocation.selectItemLocationOptions(AVAILABLE_TO);
         itemLocation.fillAvailable(AFGHANISTAN);
 
-        Sellers sellers = new Sellers(driver);
+        Sellers sellers = advancedSearchPage.getSellers();
         sellers.selectEbaySellersOption();
         sellers.selectSavedSellersOption();
         sellers.selectSpecificSellersOption(true,"123520");
 
-        ViewResultsControl viewResultsControl = new ViewResultsControl(driver);
+        ViewResultsControl viewResultsControl = advancedSearchPage.getViewResultsControl();
         viewResultsControl.selectSortByOption(BEST_MATCH);
         viewResultsControl.selectViewOption(GALLERY_VIEW);
         viewResultsControl.selectPerPageOption(PER_PAGE_120);
 
-//        SearchControl searchControl = new SearchControl(driver);
+//        SearchControl searchControl = advancedSearchPage.getSearchControl();
 //        searchControl.clearOptions();
 //        searchControl.search();
     }

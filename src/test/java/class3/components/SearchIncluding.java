@@ -12,9 +12,17 @@ public class SearchIncluding extends BaseComponent {
         super(driver);
     }
 
-    public void searchIncludingOptions(SearchIncludeOptions toCheck) {
+    public void selectSearchIncludingOptions(SearchIncludeOptions toCheck) {
         By OptionToCheck = By.id(toCheck.getId());
         WebElement checkbox = waitToLoadComponent(OptionToCheck);
-        checkbox.click();
+        if (!checkbox.isSelected())
+            checkbox.click();
+    }
+
+    public void deSelectSearchIncludingOptions(SearchIncludeOptions toCheck) {
+        By OptionToCheck = By.id(toCheck.getId());
+        WebElement checkbox = waitToLoadComponent(OptionToCheck);
+        if (checkbox.isSelected())
+            checkbox.click();
     }
 }
