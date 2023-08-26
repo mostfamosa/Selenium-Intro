@@ -1,5 +1,6 @@
 package class3.components;
 
+import class3.entity.Country;
 import class3.entity.ItemLocationOptions;
 import class3.entity.LocationByMiles;
 import org.openqa.selenium.By;
@@ -45,13 +46,13 @@ public class ItemLocation extends BaseComponent {
         this.postalCode.sendKeys(postalCode);
     }
 
-    public void fillLocatedIn(String country) {
+    public void fillLocatedIn(Country country) {
         Select select = new Select(this.locatedIn);
-        select.selectByVisibleText(country);
+        select.selectByVisibleText(country.getValue());
     }
 
-    public void fillAvailable(String country) {
+    public void fillAvailable(Country country) {
         Select select = new Select(this.availableTo);
-        select.selectByVisibleText(country);
+        select.selectByVisibleText(country.getValue());
     }
 }

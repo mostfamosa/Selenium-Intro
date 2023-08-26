@@ -1,5 +1,7 @@
 package class3.components;
 
+import class3.entity.CategoryOptions;
+import class3.entity.KeywordOptions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -40,21 +42,21 @@ public class KeywordsSearch extends BaseComponent {
         anotherKeywords.sendKeys(extraKeyword);
     }
 
-    private void selectOptions(String option) {
+    private void selectOptions(KeywordOptions option) {
         Select select = new Select(options);
-        select.selectByVisibleText(option);
+        select.selectByVisibleText(option.getValue());
     }
 
-    private void selectCategory(String category) {
+    private void selectCategory(CategoryOptions category) {
         Select select = new Select(categorys);
-        select.selectByVisibleText(category);
+        select.selectByVisibleText(category.getValue());
     }
 
     public void search() {
         searchBtn.click();
     }
 
-    public void fillSearchByKeyword(String keyword, String extraKeyword, String option, String category) {
+    public void fillSearchByKeyword(String keyword, String extraKeyword, KeywordOptions option, CategoryOptions category) {
         fillKeyword(keyword);
         fillExtraKeyword(extraKeyword);
         selectOptions(option);
