@@ -1,4 +1,4 @@
-package class5.summarySeleniumExe.logic;
+package class5.summarySeleniumExe.logic.api;
 
 import class5.summarySeleniumExe.Infra.HttpRequest;
 import class5.summarySeleniumExe.Infra.ResponseWrapper;

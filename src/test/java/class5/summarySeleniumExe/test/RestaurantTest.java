@@ -1,7 +1,7 @@
 package class5.summarySeleniumExe.test;
 
 import class5.summarySeleniumExe.Infra.ResponseWrapper;
-import class5.summarySeleniumExe.logic.RestaurantApi;
+import class5.summarySeleniumExe.logic.api.RestaurantApi;
 import class5.summarySeleniumExe.logic.entities.DTOs.RestaurantDTO;
 import class5.summarySeleniumExe.logic.pages.RestaurantListPage;
 import org.apache.logging.log4j.LogManager;
