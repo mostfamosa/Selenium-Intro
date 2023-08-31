@@ -26,7 +26,7 @@ public class RestaurantTest {
     private static WebDriver driver;
     private RestaurantListPage restaurantListPage;
 
-    // default restaurant info to create
+    // default restaurant data to create
     private String restId = "12222";
     private String restName = "Moose";
     private String restAddress = "HOME";
