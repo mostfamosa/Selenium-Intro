@@ -1,5 +1,6 @@
 package class5.summarySeleniumExe.logic.pages;
 
+import class5.summarySeleniumExe.logic.components.AlertPopUp;
 import class5.summarySeleniumExe.logic.components.CreateRestaurantPopUp;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -10,13 +11,13 @@ public class RestaurantListPage extends BasePage {
 
     //locators
     private final By BUTTON_CREATE = By.xpath("//button[text() = 'Create new']");
-    private final By BUTTON_CONFIRM = By.xpath("(//button[text() = 'OK'])[1]");
 
     //web elements
     private WebElement createBtn;
     private WebElement deleteBtn;
-    private WebElement confirmBtn;
 
+    //popup
+    private AlertPopUp alertPopUp;
     public RestaurantListPage(WebDriver driver) {
         super(driver);
         initPage();
@@ -24,27 +25,24 @@ public class RestaurantListPage extends BasePage {
 
     private void initPage() {
         createBtn = waitToLoad(BUTTON_CREATE);
+        alertPopUp = new AlertPopUp(driver);
     }
 
     public void createNewRestaurant(String id, String name, String address, String score) {
         createBtn.click();
         CreateRestaurantPopUp createRestaurantPopUp = new CreateRestaurantPopUp(getDriver());
         createRestaurantPopUp.createRestaurantProcess(id, name, address, score);
-        confirmBtn = waitToLoad(BUTTON_CONFIRM);
-        confirmBtn.click();
     }
 
     public void closePopUp() {
         CreateRestaurantPopUp createRestaurantPopUp = new CreateRestaurantPopUp(getDriver());
-        createRestaurantPopUp.closePopUp();
+        createRestaurantPopUp.closeCreateRestaurantPopUp();
     }
 
     public boolean deleteRestaurant(String id) {
         By BUTTON_DELETE = By.xpath(String.format("//td[text() = '%s']//..//button", id));
         deleteBtn = waitToLoad(BUTTON_DELETE);
         deleteBtn.click();
-        confirmBtn = waitToLoad(BUTTON_CONFIRM);
-        confirmBtn.click();
         return waitToDelete(BUTTON_DELETE);
     }
 
@@ -57,5 +55,9 @@ public class RestaurantListPage extends BasePage {
             System.out.println("NoSuchElementException: " + e.getMessage());
             return false;
         }
+    }
+
+    public AlertPopUp getAlertPopUp() {
+        return alertPopUp;
     }
 }

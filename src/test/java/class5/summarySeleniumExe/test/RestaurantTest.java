@@ -64,10 +64,13 @@ public class RestaurantTest {
 
         //ACT
         restaurantListPage.createNewRestaurant(restId, restName, restAddress, restScore);
+        String alertMsg = restaurantListPage.getAlertPopUp().getAlertMsg();
+        restaurantListPage.getAlertPopUp().clickOnConfirmAlertBtn();
 
         //ASSERT
         boolean isFound = restaurantListPage.findRestaurantInPage(restId, restName, restAddress, restScore);
         assertAll(
+                () -> assertEquals("Created!", alertMsg),
                 () -> assertTrue(isFound, "failed to found the restaurant!")
         );
     }
@@ -96,15 +99,17 @@ public class RestaurantTest {
 
         //ACT
         boolean isDeleted = restaurantListPage.deleteRestaurant(restId);
-
+        String alertMsg = restaurantListPage.getAlertPopUp().getAlertMsg();
+        restaurantListPage.getAlertPopUp().clickOnConfirmAlertBtn();
         //ASSERT
         assertAll(
+                () -> assertEquals("Deleted!", alertMsg),
                 () -> assertTrue(isDeleted, "Failed to delete the restaurant!")
         );
     }
 
     @Test
-    public void delete_Restaurant_Failed() {
+    public void delete_Restaurant_Invalid_Id_Failed() {
         logger.info("Current method name: " + Thread.currentThread().getStackTrace()[1].getMethodName());
 
         //ARRANGE
@@ -156,12 +161,13 @@ public class RestaurantTest {
 
         refreshPage();
 
+        //ACT
         restName = "Assaf";
         restAddress = "GoTech Company";
         response = RestaurantApi.editRestaurant(restId, restName, restAddress, restScore);
         logger.info(response.getData());
 
-
+        //ASSERT
         assertAll(
                 //status validation
                 () -> assertEquals(200, response.getStatus(), "Expected status code is 200"),
@@ -175,17 +181,15 @@ public class RestaurantTest {
 
         refreshPage();
 
-        //ACT
-        boolean isFound = restaurantListPage.findRestaurantInPage(restId, restName, restAddress, restScore);
 
-        //ASSERT
+        boolean isFound = restaurantListPage.findRestaurantInPage(restId, restName, restAddress, restScore);
         assertAll(
                 () -> assertTrue(isFound, "Failed to found the restaurant!")
         );
     }
 
     @Test
-    public void update_Restaurant_Info_Failed() {
+    public void update_Restaurant_Invalid_Id_Info_Failed() {
         logger.info("Current method name: " + Thread.currentThread().getStackTrace()[1].getMethodName());
 
         //ARRANGE

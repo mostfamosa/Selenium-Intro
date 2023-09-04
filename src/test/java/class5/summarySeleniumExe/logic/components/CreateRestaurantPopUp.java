@@ -36,7 +36,7 @@ public class CreateRestaurantPopUp extends BaseComponent {
         submitBtn = waitToLoad(BUTTON_SUBMIT);
     }
 
-    public void closePopUp() {
+    public void closeCreateRestaurantPopUp() {
         closeBtn.click();
     }
 
