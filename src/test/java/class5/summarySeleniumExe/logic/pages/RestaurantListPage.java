@@ -11,6 +11,8 @@ public class RestaurantListPage extends BasePage {
 
     //locators
     private final By BUTTON_CREATE = By.xpath("//button[text() = 'Create new']");
+    private final String RESTAURANT_ROW_LOCATOR = "//tr[td[text()= '%s'] and td[text()= '%s'] and td[text()= '%s'] and td[text()= '%s']]";
+    private final String BUTTON_DELETE_LOCATOR = "//td[text() = '%d']//..//button";
 
     //web elements
     private WebElement createBtn;
@@ -18,40 +20,40 @@ public class RestaurantListPage extends BasePage {
 
     //popup
     private AlertPopUp alertPopUp;
+
     public RestaurantListPage(WebDriver driver) {
         super(driver);
         initPage();
     }
 
     private void initPage() {
-        createBtn = waitToLoad(BUTTON_CREATE);
+        createBtn = waitToVisible(BUTTON_CREATE);
         alertPopUp = new AlertPopUp(driver);
     }
 
-    public void createNewRestaurant(String id, String name, String address, String score) {
+    public void createNewRestaurant(int id, String name, String address, double score) {
         createBtn.click();
-        CreateRestaurantPopUp createRestaurantPopUp = new CreateRestaurantPopUp(getDriver());
+        CreateRestaurantPopUp createRestaurantPopUp = new CreateRestaurantPopUp(this.driver);
         createRestaurantPopUp.createRestaurantProcess(id, name, address, score);
     }
 
     public void closePopUp() {
-        CreateRestaurantPopUp createRestaurantPopUp = new CreateRestaurantPopUp(getDriver());
+        CreateRestaurantPopUp createRestaurantPopUp = new CreateRestaurantPopUp(this.driver);
         createRestaurantPopUp.closeCreateRestaurantPopUp();
     }
 
-    public boolean deleteRestaurant(String id) {
-        By BUTTON_DELETE = By.xpath(String.format("//td[text() = '%s']//..//button", id));
-        deleteBtn = waitToLoad(BUTTON_DELETE);
+    public void deleteRestaurant(int id) {
+        By BUTTON_DELETE = By.xpath(String.format(BUTTON_DELETE_LOCATOR, id));
+        deleteBtn = waitToVisible(BUTTON_DELETE);
         deleteBtn.click();
-        return waitToDelete(BUTTON_DELETE);
     }
 
-    public boolean findRestaurantInPage(String id, String name, String address, String score) {
-        By RESTAURANT_ROW = By.xpath(String.format("//tr[td[text()= '%s'] and td[text()= '%s'] and td[text()= '%s'] and td[text()= '%s']]", id, name, address, score));
+    public boolean findRestaurantInPage(int id, String name, String address, double score) {
+        By RESTAURANT_ROW = By.xpath(String.format(RESTAURANT_ROW_LOCATOR, id, name, address, score));
         try {
-            WebElement restaurantRow = waitToLoad(RESTAURANT_ROW);
+            waitToVisible(RESTAURANT_ROW);
             return true;
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             System.out.println("NoSuchElementException: " + e.getMessage());
             return false;
         }

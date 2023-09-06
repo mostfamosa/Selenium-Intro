@@ -23,11 +23,7 @@ public class BasePage {
     }
 
     private void initPage() {
-        titlePage = waitToLoad(LABEL_TITLE);
-    }
-
-    public WebDriver getDriver() {
-        return driver;
+        titlePage = waitToVisible(LABEL_TITLE);
     }
 
     //get the title of the page
@@ -36,7 +32,7 @@ public class BasePage {
     }
 
     //wait the element to be found
-    public WebElement waitToLoad(By locator) {
+    public WebElement waitToVisible(By locator) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 10);
             return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -49,19 +45,6 @@ public class BasePage {
             throw new TimeoutException("TimeoutException: " + e.getMessage());
         }
     }
-
-    //wait the element to be deleted
-    public boolean waitToDelete(By locator) {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, 10);
-            return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
-        } catch (NoSuchElementException e) {
-            logger.error("NoSuchElementException: \n" + e.getMessage());
-            throw new NoSuchElementException("NoSuchElementException: " + e.getMessage());
-        } catch (TimeoutException e) {
-            logger.error("TimeoutException: \n" + e.getMessage());
-            throw new TimeoutException("TimeoutException: " + e.getMessage());
-        }
-    }
+    
 
 }

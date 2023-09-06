@@ -3,6 +3,7 @@ package class5.summarySeleniumExe.logic.api;
 import class5.summarySeleniumExe.Infra.HttpRequest;
 import class5.summarySeleniumExe.Infra.ResponseWrapper;
 import class5.summarySeleniumExe.logic.entities.DTOs.AllRestaurantsDTO;
+import class5.summarySeleniumExe.logic.entities.DTOs.CreateRestaurantRequest;
 import class5.summarySeleniumExe.logic.entities.DTOs.RestaurantDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,21 +24,8 @@ public class RestaurantApi {
 
 
     //create new restaurant
-    public static ResponseWrapper<RestaurantDTO> createNewRestaurant(String id, String name, String address, String score) {
-        logger.info("Current method name: " + Thread.currentThread().getStackTrace()[1].getMethodName());
-
-        String url = BASE_URL + "restaurant";
-        // Create a map representing your body request data
-
-        Map<String, String> bodyRequestData = new HashMap<>();
-        bodyRequestData.put("id", id);
-        bodyRequestData.put("name", name);
-        bodyRequestData.put("score", score);
-        bodyRequestData.put("address", address);
-
-        String requestBody = buildBodyRequest(bodyRequestData);
-
-        return HttpRequest.request(POST, url, requestBody, RestaurantDTO.class);
+    public static ResponseWrapper<RestaurantDTO> createNewRestaurant(int id, String name, String address, double score) {
+        return HttpRequest.request(POST, BASE_URL + "restaurant", new CreateRestaurantRequest(id, name, score, address), RestaurantDTO.class);
     }
 
     //Build body request
@@ -73,23 +61,8 @@ public class RestaurantApi {
     }
 
     //Updates a property of a restaurant
-    public static ResponseWrapper<RestaurantDTO> editRestaurant(String id, String name, String address, String score) {
-        logger.info("Current method name: " + Thread.currentThread().getStackTrace()[1].getMethodName());
-
-        String url = BASE_URL + "restaurant/" + id;
-
-        // Create a map representing your data
-        Map<String, String> bodyRequestData = new HashMap<>();
-        if (name != null)
-            bodyRequestData.put("name", name);
-        if (score != null)
-            bodyRequestData.put("score", score);
-        if (address != null)
-            bodyRequestData.put("address", address);
-
-        String requestBody = buildBodyRequest(bodyRequestData);
-
-        return HttpRequest.request(PATCH, url, requestBody, RestaurantDTO.class);
+    public static ResponseWrapper<RestaurantDTO> editRestaurant(int id, String name, String address, double score) {
+        return HttpRequest.request(PATCH, BASE_URL + "restaurant/" + id, new CreateRestaurantRequest(id, name, score, address), RestaurantDTO.class);
     }
 
     //Gets all restaurants in the system

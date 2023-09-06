@@ -44,8 +44,8 @@ public class CreateRestaurantPopUp extends BaseComponent {
         submitBtn.click();
     }
 
-    private void insertId(String id) {
-        idInput.sendKeys(id);
+    private void insertId(int id) {
+        idInput.sendKeys(Integer.toString(id));
     }
 
     private void insertName(String name) {
@@ -56,8 +56,8 @@ public class CreateRestaurantPopUp extends BaseComponent {
         addressInput.sendKeys(address);
     }
 
-    private void insertScore(String score) {
-        scoreInput.sendKeys(score);
+    private void insertScore(double score) {
+        scoreInput.sendKeys(Double.toString(score));
     }
 
     private void clearInputs() {
@@ -67,7 +67,7 @@ public class CreateRestaurantPopUp extends BaseComponent {
         scoreInput.clear();
     }
 
-    public void createRestaurantProcess(String id, String name, String address, String score) {
+    public void createRestaurantProcess(int id, String name, String address, double score) {
         clearInputs();
         insertId(id);
         insertName(name);

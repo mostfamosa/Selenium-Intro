@@ -2,6 +2,8 @@ package class5.summarySeleniumExe.Infra;
 
 import class5.summarySeleniumExe.logic.entities.enums.HttpMethods;
 import class5.summarySeleniumExe.utils.ValidateJson;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.HttpDelete;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPatch;
@@ -26,7 +28,7 @@ public class HttpRequest {
     private static final Logger logger = LogManager.getLogger(HttpRequest.class);
 
     //request without param & header
-    public static <T> ResponseWrapper<T> request(HttpMethods httpMethods, String url, String body, Class<T> clz) {
+    public static <T> ResponseWrapper<T> request(HttpMethods httpMethods, String url, Object body, Class<T> clz) {
         return request(httpMethods, url, null, body, null, clz);
     }
 
@@ -45,9 +47,8 @@ public class HttpRequest {
         return request(httpMethods, url, null, null, headers, clz);
     }
 
-    public static <T> ResponseWrapper<T> request(HttpMethods httpMethods, String url, Map<String, String> queryParams, String requestBody, Map<String, String> headers, Class<T> clz) {
-        ResponseWrapper<T> responseWrapper = new ResponseWrapper<>();
-        logger.info("Current method name: " +Thread.currentThread().getStackTrace()[1].getMethodName());
+    public static <T> ResponseWrapper<T> request(HttpMethods httpMethods, String url, Map<String, String> queryParams, Object requestBody, Map<String, String> headers, Class<T> clz) {
+        logger.info("Current method name: " + Thread.currentThread().getStackTrace()[2].getMethodName());
 
         // Set the param of the request if found!
         if (queryParams != null) {
@@ -65,8 +66,15 @@ public class HttpRequest {
 
                 // Set the request body for POST requests
                 if (requestBody != null) {
-                    StringEntity entity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-                    request.setEntity(entity);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonBody = null;
+                    try {
+                        jsonBody = objectMapper.writeValueAsString(requestBody);
+                        StringEntity entity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
+                        request.setEntity(entity);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else {
                     // Set an empty request body
                     request.setEntity(new StringEntity("", ContentType.APPLICATION_JSON));
@@ -81,8 +89,15 @@ public class HttpRequest {
                 request = new HttpPatch(url);
                 // Set the request body for PATCH requests
                 if (requestBody != null) {
-                    StringEntity entity = new StringEntity(requestBody, ContentType.APPLICATION_JSON);
-                    request.setEntity(entity);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonBody = null;
+                    try {
+                        jsonBody = objectMapper.writeValueAsString(requestBody);
+                        StringEntity entity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
+                        request.setEntity(entity);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             case DELETE -> {
@@ -99,23 +114,23 @@ public class HttpRequest {
                 request.setHeader(key, headers.get(key));
             }
         }
-        logger.info("Request info : "+ request);
+        logger.info("Request info : " + request);
         // Create an instance of CloseableHttpClient
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             // Execute
-            execute(httpClient, request, responseWrapper, clz);
+            return execute(httpClient, request, clz);
         } catch (IOException e) {
             logger.error("Error of creating an instance of CloseableHttpClient:\n" + e);
             throw new RuntimeException("Error of creating an instance of CloseableHttpClient:\n" + e);
         }
-        return responseWrapper;
     }
 
-    public static <T> void execute(CloseableHttpClient httpClient, ClassicHttpRequest httpMethod, ResponseWrapper<T> responseWrapper, Class<T> clz) {
-        logger.info("Current method name: " +Thread.currentThread().getStackTrace()[1].getMethodName());
-
+    public static <T> ResponseWrapper<T> execute(CloseableHttpClient httpClient, ClassicHttpRequest httpMethod, Class<T> clz) {
+        logger.info("Current method name: " + Thread.currentThread().getStackTrace()[2].getMethodName());
         // Execute the request and get the response
         try (CloseableHttpResponse response = httpClient.execute(httpMethod)) {
+            ResponseWrapper<T> responseWrapper = new ResponseWrapper<>();
+
             // Get the response status code
             responseWrapper.setStatus(response.getCode());
 
@@ -124,8 +139,8 @@ public class HttpRequest {
             String responseBody = EntityUtils.toString(responseEntity);
             // Validate Json
             responseWrapper.setData(ValidateJson.validate(clz, responseBody));
-            logger.info("Response info : "+responseWrapper);
-
+            logger.info("Response info : " + responseWrapper);
+            return responseWrapper;
         } catch (IOException | ParseException e) {
             logger.error("Failed to execute request : " + httpMethod.getRequestUri() + "\n" + e);
             throw new RuntimeException(e);
