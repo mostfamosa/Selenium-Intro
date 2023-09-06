@@ -2,10 +2,7 @@ package class5.summarySeleniumExe.logic.pages;
 
 import class5.summarySeleniumExe.logic.components.AlertPopUp;
 import class5.summarySeleniumExe.logic.components.CreateRestaurantPopUp;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 public class RestaurantListPage extends BasePage {
 
@@ -53,8 +50,8 @@ public class RestaurantListPage extends BasePage {
         try {
             waitToVisible(RESTAURANT_ROW);
             return true;
-        } catch (NoSuchElementException e) {
-            System.out.println("NoSuchElementException: " + e.getMessage());
+        } catch (NoSuchElementException | TimeoutException e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
